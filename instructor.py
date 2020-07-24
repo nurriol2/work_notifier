@@ -2,6 +2,7 @@
 
 import pandas as pd 
 import numpy as np 
+from exceptions import NameNotFoundError
 
 class Instructor:
 
@@ -36,10 +37,8 @@ class Instructor:
             self.area = self._get_area(self.todays_schedule)
             self.local_df = self._get_local_df(self.todays_schedule)
             self.schedule_vector = self._populate_schedule_vector()
-        else:
-            #TODO:  add exceptions for names not scheduled 
-            print("Name not found in schedule")
-            raise KeyboardInterrupt
+        else: 
+            raise NameNotFoundError("{} could not be found in the schedule. Please check spelling.".format(self.name))
         return 
         
     def check_if_scheduled(self):
@@ -79,6 +78,11 @@ class Instructor:
         return df[list(df.columns)][self.area[0]:self.area[2]+1]
     
     def _populate_schedule_vector(self):
+        """Encode the timeslots an instructor is scheduled as a binary vector
+
+        Returns:
+            list: Value of 1 at the i-th index indicates that the instructor is scheduled for the i-th timeslot
+        """
         timeslots = self.local_df.columns[1:]
         #the number of 15 minute intervals on the schedule 
         ntimeslots = len(timeslots)
@@ -91,12 +95,22 @@ class Instructor:
         return self.schedule_vector
 
     def _forward_mapping(self):
+        """Mapping between indices of a vector and timeslots on a schedule
+
+        Returns:
+            dict: Keys are ints spanning the length of a vector. Values are 15 minute timeslots as strings.
+        """
         forward_mapping = {}
         for i in range(0, len(self.schedule_vector)):
             forward_mapping[i] = self.local_df.columns[1:][i]
         return forward_mapping
     
     def generate_target_splits(self):
+        """Find start-end indices for all non-zero subarrays within a vector
+
+        Returns:
+            list: Elements are tuples of ints representing the start-end indices of a non-zero subarray
+        """
         
         index_vector = []
         for i, v in enumerate(self.schedule_vector):
@@ -119,9 +133,12 @@ class Instructor:
             target_indices.append((index_vector[pair[0]], index_vector[pair[1]]))
         return target_indices
 
-    
-
     def get_human_time(self):
+        """Create the content for a text message notifying one instructor of their hours
+
+        Returns:
+            string: The instructor's name and the time range they are working
+        """
         mapping = self._forward_mapping()
         splits = self.generate_target_splits()
 
