@@ -1,25 +1,17 @@
 #!/usr/bin/env python3 
 
-import pandas as pd 
 import numpy as np 
-from exceptions import NameNotFoundError
+from schedule import Schedule
+from exceptions import *
 
 class Instructor:
-
-    def process_schedule_from_csv(source=r"~/Desktop/projects/tutoring/Foo Schedule Online - 7.20.csv"):
-        df = pd.read_csv(source)
-        df = df.fillna(0)
-        df = df.rename(columns={'Unnamed: 0':"Instructors"})
-        return df
-    
-    #class attributes
-    todays_schedule = process_schedule_from_csv()
-    
-    def __init__(self, name, local_df=None, schedule_vector=None, area=None):
+        
+    def __init__(self, name, todays_schedule=None, local_df=None, schedule_vector=None, area=None):
         """A data type for instructors
 
         Args:
             name (string): The name that is seen on the online schedule
+            todays_schedule (default None): A preprocessed version of the online schedule
             local_df (default None): Sub-dataframe of online schedule with client information for only 1 instructor  
             schedule_vector (default None): Binary numpy array encoding timeslots where instructor is scheduled
             area (default None): Tuple of ordered integers representing the numbered rowIDs for 1 instructor
@@ -28,17 +20,32 @@ class Instructor:
         self.local_df = local_df
         self.schedule_vector = schedule_vector
         self.area = area
+        self.todays_schedule = todays_schedule
 
         self._finish_initializing()
         return 
 
+    #TODO:  make `todays_schedule` assignment robust to incorrect datatypes
     def _finish_initializing(self):
-        if self.check_if_scheduled():
-            self.area = self._get_area(self.todays_schedule)
-            self.local_df = self._get_local_df(self.todays_schedule)
+        """Data verification and calling setters for instance attributes
+
+        Raises:
+            ScheduleError: If `todays_schedule` is not given
+            NameNotFoundError: If `name` is not an element of the list of scheduled instructors
+        """
+        #check for an instance of `Schedule()`
+        if self.todays_schedule==None:
+            raise ScheduleError("Cannot find DataFrame for `todays_schedule`")
+        
+        #check that the name appears as an instructor
+        if not self.check_if_scheduled():
+            raise NameNotFoundError("{} could not be found in the schedule. Please check spelling.".format(self.name)) 
+        else:
+            #setting remaining instance attributes
+            self.area = self._get_area(self.todays_schedule.content)
+            self.local_df = self._get_local_df(self.todays_schedule.content)
             self.schedule_vector = self._populate_schedule_vector()
-        else: 
-            raise NameNotFoundError("{} could not be found in the schedule. Please check spelling.".format(self.name))
+        
         return 
         
     def check_if_scheduled(self):
@@ -48,23 +55,20 @@ class Instructor:
             bool: True if instructor name appears in list of scheduled instructors. False otherwise.
         """
         result = False
-        scheduled_for_today = self._get_scheduled_instructors(self.todays_schedule)
-        if self.name in scheduled_for_today:
+        working_instructors = self.todays_schedule.get_scheduled_instructors()
+        if self.name in working_instructors:
             result = True
         return result 
-
-    def _get_scheduled_instructors(self, df):
-        """Names of instructors who are scheduled for the day
-
-        Args:
-            df (pandas.DataFrame): Processed version of the daily online schedule
-
-        Returns:
-            list: List of strings. The names of the instructors scheduled on the daily online schedule
-        """
-        return list(df[df["Instructors"]!=0]["Instructors"])
     
     def _get_area(self, df):
+        """Determine the numbered rowIDs that encompass the instructor's client list
+
+        Args:
+            df (pandas.DataFrame): The online schedule represented by a DataFrame
+
+        Returns:
+            tuple: Assigned rowIDs ordered from smallest to largest 
+        """
         loc = int(df[df["Instructors"]==self.name].index.values)
         return (loc-1, loc, loc+1)
 
