@@ -146,13 +146,46 @@ class Instructor:
         mapping = self._forward_mapping()
         splits = self.generate_target_splits()
 
-        message = "{} is scheduled for...".format(self.name)
+        message = "{} is scheduled for... ".format(self.name)
+        """
         for pair in splits:
             earliest = mapping[pair[0]]
             latest = mapping[pair[-1]]
 
             start_time = earliest.split('-')[0]
             end_time = latest.split('-')[-1]
-            message += "\n{} to {}".format(start_time, end_time)
-        
+            message += "{} to {}\n".format(start_time, end_time)
+        """
+        if len(splits)>1:
+            first_pair = splits[0]
+            last_pair = splits[-1]
+
+            earliest = mapping[first_pair[0]]
+            latest = mapping[first_pair[-1]]
+            start_time = earliest.split('-')[0]
+            end_time = latest.split('-')[-1]
+            message += "{} to {}".format(start_time, end_time)
+
+            for pair in splits[1:-1]:
+                earliest = mapping[pair[0]]
+                latest = mapping[pair[-1]]
+
+                start_time = earliest.split('-')[0]
+                end_time = latest.split('-')[-1]
+                message += ", {} to {}".format(start_time, end_time)
+            
+            earliest = mapping[last_pair[0]]
+            latest = mapping[last_pair[-1]]
+            start_time = earliest.split('-')[0]
+            end_time = latest.split('-')[-1]
+            message += ", and {} to {}".format(start_time, end_time)
+            
+        else:
+            pair = splits[0]
+            earliest = mapping[pair[0]]
+            latest = mapping[pair[-1]]
+
+            start_time = earliest.split('-')[0]
+            end_time = latest.split('-')[-1]
+            message += "{} to {}\n".format(start_time, end_time)
         return message
