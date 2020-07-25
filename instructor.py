@@ -116,12 +116,14 @@ class Instructor:
             list: Elements are tuples of ints representing the start-end indices of a non-zero subarray
         """
         
+        #the hot indices of schedule_vector
         index_vector = []
         for i, v in enumerate(self.schedule_vector):
             if v==1:
                 index_vector.append(i)              
 
         fast, slow = 0, 0
+        #start-stop locations of consecutive subarrays inside index_vector
         split_ons = []
         for i in range(1, len(index_vector)):
             if index_vector[i]-index_vector[i-1]==1:
@@ -132,6 +134,7 @@ class Instructor:
                 slow = i 
         split_ons.append((slow, fast))
 
+        #boosting split_ons indices to the schedule_vector frame
         target_indices = []
         for pair in split_ons:
             target_indices.append((index_vector[pair[0]], index_vector[pair[1]]))
