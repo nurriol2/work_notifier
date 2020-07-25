@@ -4,7 +4,7 @@ import pandas as pd
 
 class Schedule:
 
-    def __init__(self, source=r"~/Desktop/projects/tutoring/Foo Schedule Online - 7.20.csv"):
+    def __init__(self, source=r"~/Desktop/projects/work_notifier/Foo Schedule Online - 7.20.csv"):
         self.source = source 
         self.content = self.process_schedule_from_csv()
         return 
