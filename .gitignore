@@ -133,3 +133,6 @@ dmypy.json
 
 #Twilio
 credentials.py
+
+#Google 02Auth
+client_secret_file.json 
