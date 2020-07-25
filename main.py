@@ -2,15 +2,24 @@
 
 from instructor import Instructor
 from schedule import Schedule
+from text_message import TextMessage
 
 def main():
 
-    today = Schedule(source=r"/Users/nikourriola/Desktop/projects/tutoring/Mathnasium Schedule Online! - 7.21.csv")
+    #the online schedule for today's date
+    today = Schedule()
+
+    #the content being sent to instructors
+    group_text = TextMessage()
 
     people = today.get_scheduled_instructors()
     for person in people:
-        print(Instructor(person, todays_schedule=today).get_human_time())
+        to_add = Instructor(person, todays_schedule=today).get_human_time()
+        group_text.append_to_msg_content(to_add)
 
+    #replace with group_text.send_text() after testing
+    print(group_text.msg_content)
+    #group_text.send_text()
     return 
 
 if __name__=="__main__":
