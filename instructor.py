@@ -137,55 +137,56 @@ class Instructor:
             target_indices.append((index_vector[pair[0]], index_vector[pair[1]]))
         return target_indices
 
+    def format_splits_pair(self, pair):
+        """Decode the start and end times from a pair of encoded indices
+
+        Args:
+            pair (tuple): Ordered tuple of strings as:  (earliest timeslot, latest timeslot)
+
+        Returns:
+            tuple: Human readable version of the start time and end time
+        """
+        mapping = self._forward_mapping()
+
+        earliest = mapping[pair[0]]
+        latest = mapping[pair[-1]]
+        start_time = earliest.split('-')[0]
+        end_time = latest.split('-')[-1]
+        return (start_time, end_time)
+
     def get_human_time(self):
         """Create the content for a text message notifying one instructor of their hours
 
         Returns:
             string: The instructor's name and the time range they are working
         """
-        mapping = self._forward_mapping()
         splits = self.generate_target_splits()
 
         message = "{} is scheduled for... ".format(self.name)
-        """
-        for pair in splits:
-            earliest = mapping[pair[0]]
-            latest = mapping[pair[-1]]
-
-            start_time = earliest.split('-')[0]
-            end_time = latest.split('-')[-1]
-            message += "{} to {}\n".format(start_time, end_time)
-        """
+        
+        #text will look different depending on the number of time ranges
+        #multiple breaks scheduled for instructor
         if len(splits)>1:
+            #the first and last time ranges seen in the text message
             first_pair = splits[0]
             last_pair = splits[-1]
 
-            earliest = mapping[first_pair[0]]
-            latest = mapping[first_pair[-1]]
-            start_time = earliest.split('-')[0]
-            end_time = latest.split('-')[-1]
+            #format the first time range
+            start_time, end_time = self.format_splits_pair(first_pair)
             message += "{} to {}".format(start_time, end_time)
 
+            #middle time ranges need punctuation
             for pair in splits[1:-1]:
-                earliest = mapping[pair[0]]
-                latest = mapping[pair[-1]]
-
-                start_time = earliest.split('-')[0]
-                end_time = latest.split('-')[-1]
+                start_time, end_time = self.format_splits_pair(first_pair)
                 message += ", {} to {}".format(start_time, end_time)
             
-            earliest = mapping[last_pair[0]]
-            latest = mapping[last_pair[-1]]
-            start_time = earliest.split('-')[0]
-            end_time = latest.split('-')[-1]
+            #format the string for the last time range 
+            start_time, end_time = self.format_splits_pair(last_pair)
             message += ", and {} to {}".format(start_time, end_time)
             
+        #the instructor's schedule does not have any breaks scheduled
         else:
             pair = splits[0]
-            earliest = mapping[pair[0]]
-            latest = mapping[pair[-1]]
-
-            start_time = earliest.split('-')[0]
-            end_time = latest.split('-')[-1]
+            start_time, end_time = self.format_splits_pair(pair)
             message += "{} to {}\n".format(start_time, end_time)
         return message
