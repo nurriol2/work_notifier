@@ -136,3 +136,4 @@ credentials.py
 
 #Google O2Auth
 client_secret_file.json 
+*.pickle
