@@ -1,5 +1,6 @@
 #!/usr/bin/env python3 
 
+from google_sheet import GoogleSheet
 from instructor import Instructor
 from schedule import Schedule
 from text_message import TextMessage
@@ -7,7 +8,7 @@ from text_message import TextMessage
 def main():
 
     #the online schedule for today's date
-    today = Schedule()
+    today = Schedule("6.24.20")
 
     #the content being sent to instructors
     group_text = TextMessage()
