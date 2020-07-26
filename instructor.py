@@ -6,7 +6,7 @@ from exceptions import *
 
 class Instructor:
         
-    def __init__(self, name, todays_schedule=None, local_df=None, schedule_vector=None, area=None):
+    def __init__(self, name, todays_schedule=None, local_df=None, schedule_vector=None, area=None, table_id=None):
         """A data type for instructors
 
         Args:
@@ -21,6 +21,7 @@ class Instructor:
         self.schedule_vector = schedule_vector
         self.area = area
         self.todays_schedule = todays_schedule
+        self.table_id = table_id
 
         self._finish_initializing()
         return 
@@ -69,7 +70,8 @@ class Instructor:
         Returns:
             tuple: Assigned rowIDs ordered from smallest to largest 
         """
-        loc = int(df[df["Instructors"]==self.name].index.values)
+        cand = df[df["Instructors"]==self.name].index.values
+        loc = int(cand)
         return (loc-1, loc, loc+1)
 
 
@@ -185,7 +187,7 @@ class Instructor:
             
             #format the string for the last time range 
             start_time, end_time = self.format_splits_pair(last_pair)
-            message += ", and {} to {}".format(start_time, end_time)
+            message += ", and {} to {}\n".format(start_time, end_time)
             
         #the instructor's schedule does not have any breaks scheduled
         else:
