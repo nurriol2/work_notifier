@@ -21,7 +21,6 @@ class Instructor:
         self.schedule_vector = schedule_vector
         self.area = area
         self.todays_schedule = todays_schedule
-        self.table_id = table_id
 
         self._finish_initializing()
         return 
@@ -68,11 +67,10 @@ class Instructor:
             df (pandas.DataFrame): The online schedule represented by a DataFrame
 
         Returns:
-            tuple: Assigned rowIDs ordered from smallest to largest 
+            tuple: Smallest and largest rowIDs
         """
         cand = df[df["Instructors"]==self.name].index.values
-        loc = int(cand)
-        return (loc-1, loc, loc+1)
+        return (min(cand)-1, max(cand)+1)
 
 
     def _get_local_df(self, df):
@@ -81,7 +79,7 @@ class Instructor:
         Returns:
             pandas.DataFrame: A prospective table of a single instructor's daily schedule
         """
-        return df[list(df.columns)][self.area[0]:self.area[2]+1]
+        return df[list(df.columns)][self.area[0]:self.area[1]+1]
     
     def _populate_schedule_vector(self):
         """Encode the timeslots an instructor is scheduled as a binary vector
@@ -95,7 +93,8 @@ class Instructor:
         self.schedule_vector = np.zeros((ntimeslots))
 
         for i, timeslot in enumerate(timeslots):
-            for record in self.area:
+            #checking each cell's value
+            for record in range(self.area[0], self.area[1]+1):
                 if self.local_df[timeslot][record]!=0:
                     self.schedule_vector[i]=1
         return self.schedule_vector
