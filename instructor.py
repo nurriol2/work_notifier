@@ -181,7 +181,7 @@ class Instructor:
 
             #middle time ranges need punctuation
             for pair in splits[1:-1]:
-                start_time, end_time = self.format_splits_pair(first_pair)
+                start_time, end_time = self.format_splits_pair(pair)
                 message += ", {} to {}".format(start_time, end_time)
             
             #format the string for the last time range 
