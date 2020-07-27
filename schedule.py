@@ -17,6 +17,9 @@ class Schedule:
             pandas.DataFrame: Fully processed DataFrame representing the online schedule
         """
         df = GoogleSheet(self.date).sheet_to_dataframe()
+        #HACK:  appending blank row to avoid KeyError
+        df2 = pd.DataFrame(['' for i in df.columns])
+        df = df.append(df2, ignore_index=True)
         df = df.fillna(0)
         #set the columns as timeslots 
         df.columns = df.iloc[0]
