@@ -8,7 +8,7 @@ from text_message import TextMessage
 def main():
 
     #the online schedule for today's date
-    today = Schedule("6.24.20")
+    today = Schedule("7.25")
 
     #the content being sent to instructors
     group_text = TextMessage()
