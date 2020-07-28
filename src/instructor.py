@@ -11,17 +11,17 @@ class Instructor:
 
         Args:
             name (string): The name that is seen on the online schedule
-            todays_schedule (default None): A preprocessed version of the online schedule
-            local_df (default None): Sub-dataframe of online schedule with client information for only 1 instructor  
-            schedule_vector (default None): Binary numpy array encoding timeslots where instructor is scheduled
-            area (default None): Tuple of ordered integers representing the numbered rowIDs for 1 instructor
+            todays_schedule (pandas.DataFrame, default None): A preprocessed version of the online schedule
+            local_df (pandas.DataFrame, default None): Sub-dataframe of online schedule with client information for only 1 instructor  
+            schedule_vector (list, default None): Binary numpy array encoding timeslots where instructor is scheduled
+            area (tuple, default None): Tuple of ordered integers representing the numbered rowIDs for 1 instructor
         """
         self.name = name 
+        self.todays_schedule = todays_schedule
         self.local_df = local_df
         self.schedule_vector = schedule_vector
         self.area = area
-        self.todays_schedule = todays_schedule
-
+        
         self._finish_initializing()
         return 
 
