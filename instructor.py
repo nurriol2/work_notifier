@@ -182,11 +182,11 @@ class Instructor:
             #middle time ranges need punctuation
             for pair in splits[1:-1]:
                 start_time, end_time = self.format_splits_pair(pair)
-                message += ", {} to {}".format(start_time, end_time)
+                message += ", {} to {},".format(start_time, end_time)
             
             #format the string for the last time range 
             start_time, end_time = self.format_splits_pair(last_pair)
-            message += ", and {} to {}\n".format(start_time, end_time)
+            message += " and {} to {}\n".format(start_time, end_time)
             
         #the instructor's schedule does not have any breaks scheduled
         else:
