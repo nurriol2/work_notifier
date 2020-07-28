@@ -14,11 +14,11 @@ def get_tomorrows_date():
 
 def main():
 
-    #Title of the online schedule (a Google Sheet)
-    workday = get_tomorrows_date()
+    #title of the online schedule (a Google Sheet)
+    sheet_title = get_tomorrows_date()
 
     #the online schedule for the next day
-    schedule = Schedule(workday)
+    schedule = Schedule(sheet_title)
 
     #the content being sent to instructors
     group_text = TextMessage()
@@ -28,9 +28,7 @@ def main():
         to_add = Instructor(person, todays_schedule=schedule).get_human_time()
         group_text.append_to_msg_content(to_add)
 
-    #replace with group_text.send_text() after testing
-    print(group_text.msg_content)
-    #group_text.send_text()
+    group_text.send_text()
     return 
 
 if __name__=="__main__":
