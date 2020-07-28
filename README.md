@@ -57,10 +57,22 @@ Since I have a Unix system, my preferred method for scheduling tasks is using `c
 I have provided the `crontab` for my use case as an example in `example_materials/crontab_example.txt`
 
 # Example Output
-A typical daily schedule might look something like this  
+The schedule for "tomorrow" might look something like this
 
-**A Portion of a Daily Schedule**
 ![Daily Schedule](https://github.com/nurriol2/work_notifier/blob/master/example_materials/screenshot_02.png)
+
+The header of this table is separated into chronological 15 minute intervals. Employee names are given in Column A and client names fill in the space.
+
+Each employee is responsible for seeing the clients assigned in one row above, below, and equal to where their name appears.
+
+From this portion of the schedule, it looks like everyone starts work at 1:00 pm, except Shaco.
+The first clients for Shaco do not appear until 4:30 pm.
+
+The main function of this program would automatically be called by cron at 7:00 pm the day before. Then, the following message would be sent to the specified phone numbers.
+
+![Text Message](https://github.com/nurriol2/work_notifier/blob/master/example_materials/screenshot_01.jpg).
+
+*The keen among you might notice this message was sent after 7:00 pm. This is because I worked on this write-up after.*
 
 # Concepts, Frameworks, and Modules
 - Twilio 
