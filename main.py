@@ -1,21 +1,31 @@
 #!/usr/bin/env python3 
 
+import datetime
 from google_sheet import GoogleSheet
 from instructor import Instructor
 from schedule import Schedule
 from text_message import TextMessage
 
+def get_tomorrows_date():
+    date = datetime.date.today() + datetime.timedelta(days=1)
+    _, mo, dd = str(date).split('-')
+    mo = mo.strip('0')
+    return mo + '.' + dd
+
 def main():
 
-    #the online schedule for today's date
-    today = Schedule("7.25")
+    #Title of the online schedule (a Google Sheet)
+    workday = get_tomorrows_date()
+
+    #the online schedule for the next day
+    schedule = Schedule(workday)
 
     #the content being sent to instructors
     group_text = TextMessage()
 
-    people = today.get_scheduled_instructors()
+    people = schedule.get_scheduled_instructors()
     for person in people:
-        to_add = Instructor(person, todays_schedule=today).get_human_time()
+        to_add = Instructor(person, todays_schedule=schedule).get_human_time()
         group_text.append_to_msg_content(to_add)
 
     #replace with group_text.send_text() after testing
