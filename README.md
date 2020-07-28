@@ -60,7 +60,7 @@ I have provided the `crontab` for my use case as an example in `example_material
 A typical daily schedule might look something like this  
 
 **A Portion of a Daily Schedule**
-![Daily Schedule](~/Desktop/projects/work_notifier/example_materials/screenshot_02.png)
+![Daily Schedule](https://github.com/nurriol2/work_notifier/blob/master/example_materials/screenshot_02.png)
 
 # Concepts, Frameworks, and Modules
 - Twilio 
