@@ -1,0 +1,9 @@
+# I can specify the crontab to only send out a schedule Sunday through Friday.
+# There is no need to run the script on Saturdays because we are not open *the next day*
+# Normally, we get the following day's schedule at around 1900. I will copy that behavior here
+# This crontab says 
+# at 19:00, on every day of the month, any month of the year, from Sunday to Friday...
+# move to the project directory
+# and execute `main.py` with the python3 interpreter 
+
+0 19 * * 0-5 cd ~/Desktop/path/to/project/ && /Users/myusername/anaconda3/bin/python3 main.py
