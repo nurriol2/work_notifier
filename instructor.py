@@ -6,7 +6,7 @@ from exceptions import *
 
 class Instructor:
         
-    def __init__(self, name, todays_schedule=None, local_df=None, schedule_vector=None, area=None, table_id=None):
+    def __init__(self, name, todays_schedule=None, local_df=None, schedule_vector=None, area=None):
         """A data type for instructors
 
         Args:
