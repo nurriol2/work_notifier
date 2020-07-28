@@ -70,7 +70,7 @@ The first clients for Shaco do not appear until 4:30 pm.
 
 The main function of this program would automatically be called by cron at 7:00 pm the day before. Then, the following message would be sent to the specified phone numbers.
 
-![Text Message](https://github.com/nurriol2/work_notifier/blob/master/example_materials/screenshot_01.jpg).
+![Text Message](https://github.com/nurriol2/work_notifier/blob/master/example_materials/screenshot_01.jpg)
 
 *The keen among you might notice this message was sent after 7:00 pm. This is because I worked on this write-up after.*
 
